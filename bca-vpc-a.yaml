@@ -238,21 +238,21 @@ Resources:
   #   Properties:
   #     Domain: vpc
 
-  VpcGWNatGateway:
-    Type: "AWS::EC2::NatGateway"
-    DependsOn: 
-      - VpcGWPrivateSubnet1
- #     - VpcGWNatEip
-    Properties:
-      ConnectivityType: private
-      # AllocationId:
-      #   Fn::GetAtt:
-      #     - VpcGWNatEip
-      #     - AllocationId
-      SubnetId: !Ref VpcGWPrivateSubnet1
-      Tags:
-        - Key: Name
-          Value: "VPC A NATGW"
+#   VpcGWNatGateway:
+#     Type: "AWS::EC2::NatGateway"
+#     DependsOn: 
+#       - VpcGWPrivateSubnet1
+#  #     - VpcGWNatEip
+#     Properties:
+#       ConnectivityType: private
+#       # AllocationId:
+#       #   Fn::GetAtt:
+#       #     - VpcGWNatEip
+#       #     - AllocationId
+#       SubnetId: !Ref VpcGWPrivateSubnet1
+#       Tags:
+#         - Key: Name
+#           Value: "VPC A NATGW"
 
   # VpcGWNatInternetRoutePrivate:
   #   Type: AWS::EC2::Route
