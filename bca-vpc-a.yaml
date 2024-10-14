@@ -35,7 +35,7 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: "VPC-Gateway"
+          Value: "bca-vpc"
 
   VpcGWPublicSubnet1:
     Type: AWS::EC2::Subnet
@@ -207,36 +207,36 @@ Resources:
       SubnetId: !Ref VpcGWPrivateSubnet2
       NetworkAclId: !Ref VpcGWWorkloadSubnetsNacl
 
-  # VpcGWInternetGateway:
-  #   Type: AWS::EC2::InternetGateway
-  #   Properties:
-  #     Tags:
-  #       - Key: Name
-  #         Value: "VPC A IGW"
+   VpcGWInternetGateway:
+     Type: AWS::EC2::InternetGateway
+     Properties:
+       Tags:
+         - Key: Name
+           Value: "VPC A IGW"
 
-  # VpcGWInternetGatewayAttachment:
-  #   Type: AWS::EC2::VPCGatewayAttachment
-  #   DependsOn:
-  #     - VpcGW
-  #     - VpcGWInternetGateway
-  #   Properties:
-  #     VpcId: !Ref VpcGW
-  #     InternetGatewayId: !Ref VpcGWInternetGateway
+   VpcGWInternetGatewayAttachment:
+     Type: AWS::EC2::VPCGatewayAttachment
+     DependsOn:
+       - VpcGW
+       - VpcGWInternetGateway
+     Properties:
+       VpcId: !Ref VpcGW
+       InternetGatewayId: !Ref VpcGWInternetGateway
 
-  # VpcGWDirectInternetRoute:
-  #   Type: AWS::EC2::Route
-  #   DependsOn: 
-  #     - VpcGWInternetGateway
-  #     - VpcGWPublicSubnetRouteTable
-  #   Properties:
-  #     DestinationCidrBlock: 0.0.0.0/0
-  #     GatewayId: !Ref VpcGWInternetGateway
-  #     RouteTableId: !Ref VpcGWPublicSubnetRouteTable
+   VpcGWDirectInternetRoute:
+     Type: AWS::EC2::Route
+     DependsOn: 
+       - VpcGWInternetGateway
+       - VpcGWPublicSubnetRouteTable
+     Properties:
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId: !Ref VpcGWInternetGateway
+       RouteTableId: !Ref VpcGWPublicSubnetRouteTable
 
-  # VpcGWNatEip:
-  #   Type: "AWS::EC2::EIP"
-  #   Properties:
-  #     Domain: vpc
+   VpcGWNatEip:
+     Type: "AWS::EC2::EIP"
+     Properties:
+       Domain: vpc
 
   VpcGWNatGateway:
     Type: "AWS::EC2::NatGateway"
@@ -254,87 +254,87 @@ Resources:
         - Key: Name
           Value: "VPC A NATGW"
 
-  # VpcGWNatInternetRoutePrivate:
-  #   Type: AWS::EC2::Route
-  #   DependsOn: 
-  #     - VpcGWNatGateway
-  #     - VpcGWPrivateSubnetRouteTable
-  #   Properties:
-  #     DestinationCidrBlock: 0.0.0.0/0
-  #     NatGatewayId: !Ref VpcGWNatGateway
-  #     RouteTableId: !Ref VpcGWPrivateSubnetRouteTable
+   VpcGWNatInternetRoutePrivate:
+     Type: AWS::EC2::Route
+     DependsOn: 
+       - VpcGWNatGateway
+       - VpcGWPrivateSubnetRouteTable
+     Properties:
+       DestinationCidrBlock: 0.0.0.0/0
+       NatGatewayId: !Ref VpcGWNatGateway
+       RouteTableId: !Ref VpcGWPrivateSubnetRouteTable
 
-  # VpcGWEc2SecGroup:
-  #   Type: AWS::EC2::SecurityGroup
-  #   DependsOn: VpcGW
-  #   Properties:
-  #     GroupDescription: Open-up ports for ICMP
-  #     GroupName: "VPC A Security Group"
-  #     VpcId: !Ref VpcGW
-  #     SecurityGroupIngress:
-  #       - IpProtocol: icmp
-  #         CidrIp: 0.0.0.0/0
-  #         FromPort: "-1"
-  #         ToPort: "-1"
+#   VpcGWEc2SecGroup:
+#      Type: AWS::EC2::SecurityGroup
+#      DependsOn: VpcGW
+#      Properties:
+#       GroupDescription: Open-up ports for ICMP
+#       GroupName: "VPC A Security Group"
+#       VpcId: !Ref VpcGW
+#       SecurityGroupIngress:
+#          - IpProtocol: icmp
+#           CidrIp: 0.0.0.0/0
+#           FromPort: "-1"
+#           ToPort: "-1"
 
-    # VpcGWPublicServerEc2:
-    #   Type: AWS::EC2::Instance
-    #   DependsOn: 
-    #     - VpcGWEc2SecGroup
-    #     - VpcGWPublicSubnet2
-    #   Properties:
-    #     IamInstanceProfile: "NetworkingWorkshopInstanceProfile"
-    #     ImageId: !Ref AMI
-    #     InstanceType: t2.micro
-    #     NetworkInterfaces:
-    #       - AssociatePublicIpAddress: true
-    #         DeviceIndex: "0"
-    #         GroupSet:
-    #           - !Ref VpcGWEc2SecGroup
-    #         PrivateIpAddress: 10.0.2.100
-    #         SubnetId: !Ref VpcGWPublicSubnet2
-    #     Tags:
-    #       - Key: Name
-    #         Value: "VPC A Public AZ2 Server"
+#     VpcGWPublicServerEc2:
+#       Type: AWS::EC2::Instance
+#       DependsOn: 
+#         - VpcGWEc2SecGroup
+#         - VpcGWPublicSubnet2
+#       Properties:
+#         IamInstanceProfile: "NetworkingWorkshopInstanceProfile"
+#         ImageId: !Ref AMI
+#         InstanceType: t2.micro
+#         NetworkInterfaces:
+#           - AssociatePublicIpAddress: true
+#             DeviceIndex: "0"
+#             GroupSet:
+#               - !Ref VpcGWEc2SecGroup
+#             PrivateIpAddress: 10.0.2.100
+#             SubnetId: !Ref VpcGWPublicSubnet2
+#         Tags:
+#           - Key: Name
+#             Value: "VPC A Public AZ2 Server"
 
-    # VpcGWPrivateServerEc2:
-    #   Type: AWS::EC2::Instance
-    #   DependsOn: 
-    #     - VpcGWEc2SecGroup
-    #     - VpcGWPrivateSubnet1
-    #   Properties:
-    #     SubnetId: !Ref VpcGWPrivateSubnet1
-    #     ImageId: !Ref AMI
-    #     InstanceType: t2.micro
-    #     PrivateIpAddress: 10.0.1.100
-    #     SecurityGroupIds:
-    #       - Ref: VpcGWEc2SecGroup
-    #     IamInstanceProfile: "NetworkingWorkshopInstanceProfile"
-    #     Tags:
-    #       - Key: Name
-    #         Value: "VPC A Private AZ1 Server"
+#     VpcGWPrivateServerEc2:
+#       Type: AWS::EC2::Instance
+#       DependsOn: 
+#         - VpcGWEc2SecGroup
+#         - VpcGWPrivateSubnet1
+#       Properties:
+#         SubnetId: !Ref VpcGWPrivateSubnet1
+#         ImageId: !Ref AMI
+#         InstanceType: t2.micro
+#         PrivateIpAddress: 10.0.1.100
+#         SecurityGroupIds:
+#           - Ref: VpcGWEc2SecGroup
+#         IamInstanceProfile: "NetworkingWorkshopInstanceProfile"
+#         Tags:
+#           - Key: Name
+#             Value: "VPC A Private AZ1 Server"
 
-  # VPC A Endpoints
-  # EndpointS3:
-  #   Type: AWS::EC2::VPCEndpoint
-  #   DependsOn: VpcGWPrivateSubnetRouteTable
-  #   Properties:
-  #     RouteTableIds:
-  #       - !Ref VpcGWPrivateSubnetRouteTable
-  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
-  #     VpcEndpointType: 'Gateway'
-  #     VpcId: !Ref VpcGW
+#   VPC A Endpoints
+#   EndpointS3:
+#      Type: AWS::EC2::VPCEndpoint
+#      DependsOn: VpcGWPrivateSubnetRouteTable
+#      Properties:
+#       RouteTableIds:
+#          - !Ref VpcGWPrivateSubnetRouteTable
+#       ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+#       VpcEndpointType: 'Gateway'
+#       VpcId: !Ref VpcGW
 
-  # EndpointKMS:
-  #   Type: AWS::EC2::VPCEndpoint
-  #   DependsOn: 
-  #     - VpcGWPrivateSubnet1
-  #     - VpcGWPrivateSubnet2
-  #   Properties: 
-  #     PrivateDnsEnabled: True
-  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.kms'
-  #     SubnetIds: 
-  #       - !Ref VpcGWPrivateSubnet1
-  #       - !Ref VpcGWPrivateSubnet2
-  #     VpcEndpointType: 'Interface'
-  #     VpcId: !Ref VpcGW
+#   EndpointKMS:
+#      Type: AWS::EC2::VPCEndpoint
+#      DependsOn: 
+#       - VpcGWPrivateSubnet1
+#       - VpcGWPrivateSubnet2
+#      Properties: 
+#       PrivateDnsEnabled: True
+#       ServiceName: !Sub 'com.amazonaws.${AWS::Region}.kms'
+#       SubnetIds: 
+#          - !Ref VpcGWPrivateSubnet1
+#          - !Ref VpcGWPrivateSubnet2
+#       VpcEndpointType: 'Interface'
+#       VpcId: !Ref VpcGW
