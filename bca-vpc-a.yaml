@@ -207,14 +207,14 @@ Resources:
       SubnetId: !Ref VpcGWPrivateSubnet2
       NetworkAclId: !Ref VpcGWWorkloadSubnetsNacl
 
-   VpcGWInternetGateway:
+  VpcGWInternetGateway:
      Type: AWS::EC2::InternetGateway
      Properties:
        Tags:
          - Key: Name
            Value: "VPC A IGW"
 
-   VpcGWInternetGatewayAttachment:
+  VpcGWInternetGatewayAttachment:
      Type: AWS::EC2::VPCGatewayAttachment
      DependsOn:
        - VpcGW
@@ -223,7 +223,7 @@ Resources:
        VpcId: !Ref VpcGW
        InternetGatewayId: !Ref VpcGWInternetGateway
 
-   VpcGWDirectInternetRoute:
+  VpcGWDirectInternetRoute:
      Type: AWS::EC2::Route
      DependsOn: 
        - VpcGWInternetGateway
@@ -233,7 +233,7 @@ Resources:
        GatewayId: !Ref VpcGWInternetGateway
        RouteTableId: !Ref VpcGWPublicSubnetRouteTable
 
-   VpcGWNatEip:
+  VpcGWNatEip:
      Type: "AWS::EC2::EIP"
      Properties:
        Domain: vpc
@@ -254,7 +254,7 @@ Resources:
         - Key: Name
           Value: "VPC A NATGW"
 
-   VpcGWNatInternetRoutePrivate:
+  VpcGWNatInternetRoutePrivate:
      Type: AWS::EC2::Route
      DependsOn: 
        - VpcGWNatGateway
